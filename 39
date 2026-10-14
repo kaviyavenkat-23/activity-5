@@ -1,0 +1,38 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        // Keep track of elements used in the current permutation path
+        boolean[] visited = new boolean[nums.length];
+        
+        // Start backtracking with an empty path list
+        backtrack(result, new ArrayList<>(), nums, visited);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> currentPerm, int[] nums, boolean[] visited) {
+        // Base case: if the current permutation contains all elements, save a copy of it
+        if (currentPerm.size() == nums.length) {
+            result.add(new ArrayList<>(currentPerm));
+            return;
+        }
+
+        // Try placing every unused number into the current position
+        for (int i = 0; i < nums.length; i++) {
+            if (!visited[i]) {
+                // Step 1: Make a choice
+                visited[i] = true;
+                currentPerm.add(nums[i]);
+
+                // Step 2: Recurse to build the rest of the permutation
+                backtrack(result, currentPerm, nums, visited);
+
+                // Step 3: Undo the choice (Backtrack)
+                currentPerm.remove(currentPerm.size() - 1);
+                visited[i] = false;
+            }
+        }
+    }
+}

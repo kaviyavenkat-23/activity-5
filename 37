@@ -1,0 +1,50 @@
+class Solution {
+    public void solveSudoku(char[][] board) {
+        if (board == null || board.length == 0) {
+            return;
+        }
+        solve(board);
+    }
+    
+    private boolean solve(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                // Find an empty cell
+                if (board[i][j] == '.') {
+                    // Try placing digits '1' through '9'
+                    for (char c = '1'; c <= '9'; c++) {
+                        if (isValid(board, i, j, c)) {
+                            board[i][j] = c; // Make a choice
+                            
+                            // Recurse to see if this choice solves the board
+                            if (solve(board)) {
+                                return true;
+                            }
+                            
+                            board[i][j] = '.'; // Undo the choice (Backtrack)
+                        }
+                    }
+                    // If no digit fits in this cell, the current board state is invalid
+                    return false;
+                }
+            }
+        }
+        return true; // The board is fully solved
+    }
+    
+    private boolean isValid(char[][] board, int row, int col, char c) {
+        for (int i = 0; i < 9; i++) {
+            // Check row constraint
+            if (board[row][i] == c) return false;
+            
+            // Check column constraint
+            if (board[i][col] == c) return false;
+            
+            // Check 3x3 sub-grid constraint
+            // (row / 3 * 3) gives the row start index of the 3x3 box
+            // (col / 3 * 3) gives the column start index of the 3x3 box
+            if (board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false;
+        }
+        return true;
+    }
+}

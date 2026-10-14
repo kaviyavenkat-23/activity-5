@@ -1,0 +1,28 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        // Start backtracking from index 0 with an empty current subset list
+        backtrack(result, new ArrayList<>(), nums, 0);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> currentSubset, int[] nums, int start) {
+        // Add a copy of the current state of the subset to the results list
+        result.add(new ArrayList<>(currentSubset));
+
+        // Explore deeper subsets by adding remaining numbers one by one
+        for (int i = start; i < nums.length; i++) {
+            // Include the current element
+            currentSubset.add(nums[i]);
+            
+            // Move on to the next element down the line
+            backtrack(result, currentSubset, nums, i + 1);
+            
+            // Backtrack: remove the last element to explore options without it
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
